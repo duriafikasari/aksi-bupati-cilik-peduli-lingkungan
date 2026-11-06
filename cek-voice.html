@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cek Voice Perangkat - Aksi Bupati Cilik</title>
+<style>
+body{font:15px/1.5 system-ui,sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:16px}
+main{max-width:760px;margin:0 auto} h1{font-size:20px;color:#6ee7b7;margin:0 0 6px} p{margin:6px 0;color:#94a3b8;font-size:13px}
+.row{border-top:1px solid #1e293b;padding:8px 0} .id{color:#6ee7b7;font-weight:600} button{background:#065f46;color:#fff;border:1px solid #34d399;border-radius:8px;padding:5px 10px;cursor:pointer;margin:4px 6px 0 0}
+textarea{width:100%;box-sizing:border-box;background:#020617;color:#cbd5e1;border:1px solid #334155;border-radius:8px;font:12px monospace;padding:8px}
+.box{background:#1e293b;border-radius:10px;padding:10px 12px;margin:10px 0}
+</style></head><body><main>
+<h1>Cek Voice Perangkat</h1>
+<p>Halaman ini memeriksa suara (voice) yang tersedia di perangkat/peramban ini, tanpa membuka game. Peramban tidak memberi tahu gender voice, jadi gender hanya diperkirakan dari nama.</p>
+<div class="box" id="hasil">Memeriksa…</div>
+<button id="ulang">Periksa lagi</button>
+<div id="daftar"></div>
+<p>Laporan (klik lalu salin, kirim ke pengembang bila perlu):</p>
+<textarea id="lap" rows="10" readonly></textarea>
+<script>
+
+    // ------------------------------------------------------------------
+    // DETEKSI VOICE PERANGKAT (speechSynthesis) - dipakai game & halaman cek-voice.html
+    // Peramban TIDAK menyediakan data gender voice. Gender hanya DIPERKIRAKAN dari nama voice;
+    // bila tidak dapat diperkirakan, hasilnya "?" (tidak diketahui) dan pemain/guru bisa memilih manual.
+    // ------------------------------------------------------------------
+    const VoiceDetect = {
+      MALE: /\b(ardi|andika|rizki|rizky|budi|agus|bayu|arif|dimas|male|laki|pria)\b/i,
+      FEMALE: /\b(gadis|damayanti|sari|ayu|dewi|putri|female|perempuan|wanita)\b/i,
+      isId(v) {
+        const l = String(v.lang || '').toLowerCase().replace('_', '-');
+        return l === 'id' || l.startsWith('id-') || l === 'in' || l === 'in-id';
+      },
+      // -> { g: 'laki-laki' | 'perempuan' | '?', basis: string }
+      guess(v) {
+        const n = String(v.name || '');
+        if (this.MALE.test(n)) return { g: 'laki-laki', basis: 'dari nama voice' };
+        if (this.FEMALE.test(n)) return { g: 'perempuan', basis: 'dari nama voice' };
+        if (/^google\s+(bahasa\s+)?indonesia/i.test(n)) return { g: 'perempuan', basis: 'dugaan umum (voice Google id-ID biasanya perempuan; belum tentu)' };
+        return { g: '?', basis: 'nama tidak memuat petunjuk gender' };
+      },
+      // voices: array SpeechSynthesisVoice; manual: {laki, perempuan} berisi voiceURI pilihan manual
+      // -> { laki:{voice,mode}, perempuan:{voice,mode}, idCount }
+      // mode: 'manual' | 'terdeteksi' | 'sama-dengan-lawan' (gender tidak tersedia, memakai voice lain) | 'default-peramban' (tidak ada voice Indonesia)
+      map(voices, manual) {
+        manual = manual || {};
+        const idv = voices.filter(v => this.isId(v)).sort((a, b) => (b.localService === true) - (a.localService === true));
+        const find = uri => idv.find(v => v.voiceURI === uri) || voices.find(v => v.voiceURI === uri) || null;
+        const out = { idCount: idv.length };
+        const auto = { 'laki-laki': idv.find(v => this.guess(v).g === 'laki-laki') || null,
+                       'perempuan': idv.find(v => this.guess(v).g === 'perempuan') || null };
+        [['laki', 'laki-laki'], ['perempuan', 'perempuan']].forEach(([k, g]) => {
+          const m = manual[k] && find(manual[k]);
+          if (m) out[k] = { voice: m, mode: 'manual' };
+          else if (auto[g]) out[k] = { voice: auto[g], mode: 'terdeteksi' };
+          else out[k] = null;
+        });
+        ['laki', 'perempuan'].forEach(k => {
+          if (out[k]) return;
+          const other = out[k === 'laki' ? 'perempuan' : 'laki'];
+          if (other) out[k] = { voice: other.voice, mode: 'sama-dengan-lawan' };
+          else out[k] = { voice: idv[0] || null, mode: idv[0] ? 'sama-dengan-lawan' : 'default-peramban' };
+        });
+        return out;
+      }
+    };
+
+const out = {};
+function render() {
+  const sup = ('speechSynthesis' in window);
+  const vs = sup ? (speechSynthesis.getVoices() || []) : [];
+  const m = VoiceDetect.map(vs, {});
+  const nm = x => x && x.voice ? `${x.voice.name} (${x.voice.localService ? 'lokal' : 'online, butuh internet'})` : '(voice bawaan peramban)';
+  const mode = x => ({ 'terdeteksi': 'terdeteksi', 'sama-dengan-lawan': 'GENDER INI TIDAK TERSEDIA - memakai voice lain', 'default-peramban': 'TIDAK ADA voice Indonesia', 'manual': 'manual' }[x.mode]);
+  document.getElementById('hasil').innerHTML = !sup ? '<b>Peramban ini tidak mendukung speechSynthesis.</b>' :
+    `Voice di perangkat: <b>${vs.length}</b> · berbahasa Indonesia: <b>${m.idCount}</b><br>` +
+    `Laki-laki: <b>${nm(m.laki)}</b> - ${mode(m.laki)}<br>Perempuan: <b>${nm(m.perempuan)}</b> - ${mode(m.perempuan)}`;
+  const d = document.getElementById('daftar'); d.textContent = '';
+  vs.slice().sort((a, b) => (VoiceDetect.isId(b) - VoiceDetect.isId(a)) || a.name.localeCompare(b.name)).forEach(v => {
+    const g = VoiceDetect.guess(v), r = document.createElement('div'); r.className = 'row' + (VoiceDetect.isId(v) ? ' id' : '');
+    r.textContent = `${v.name} · ${v.lang} · ${v.localService ? 'lokal' : 'online'}` + (VoiceDetect.isId(v) ? ` · gender dugaan: ${g.g} (${g.basis})` : '');
+    const b = document.createElement('button'); b.textContent = 'Tes'; b.onclick = () => { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance('Halo, Bupati Cilik! Selamat datang di Kabupaten Eco Nusa.'); u.lang = 'id-ID'; u.voice = v; speechSynthesis.speak(u); };
+    r.appendChild(document.createElement('br')); r.appendChild(b); d.appendChild(r);
+  });
+  const L = ['PERANGKAT: ' + navigator.userAgent, 'speechSynthesis: ' + (sup ? 'ya' : 'TIDAK'), 'Voice: ' + vs.length + ', Indonesia: ' + m.idCount];
+  vs.forEach(v => { const g = VoiceDetect.guess(v); L.push(`- ${v.name} | ${v.lang} | ${v.localService ? 'lokal' : 'online'} | ${VoiceDetect.isId(v) ? 'ID' : '--'} | ${g.g} (${g.basis})`); });
+  L.push('HASIL laki-laki: ' + nm(m.laki) + ' - ' + mode(m.laki)); L.push('HASIL perempuan: ' + nm(m.perempuan) + ' - ' + mode(m.perempuan));
+  document.getElementById('lap').value = L.join('\n');
+}
+render();
+if ('speechSynthesis' in window) { speechSynthesis.onvoiceschanged = render; let n = 0; const t = setInterval(() => { render(); if (++n > 8) clearInterval(t); }, 500); }
+document.getElementById('ulang').onclick = render;
+document.getElementById('lap').onfocus = e => e.target.select();
+</script></main></body></html>

@@ -1,0 +1,93 @@
+﻿id,bagian,teks_dibacakan,kapan_diputar
+cover-01,1 Cover,Selamat datang di Aksi Bupati Cilik Peduli Lingkungan! Tekan tombol Mulai Bermain untuk memulai petualanganmu.,Layar cover tampil (setelah gesture pertama pemain)
+opening-01,1 Pembukaan,"Selamat datang di Kabupaten Eco Nusa! Wilayah yang dahulu asri, hijau, dan penuh energi positif.","Video pembuka, sinkron dengan teks ke-1"
+opening-02,1 Pembukaan,"Namun kini, Kabupaten Eco Nusa sedang mengalami berbagai masalah lingkungan yang serius!","Video pembuka, sinkron dengan teks ke-2"
+opening-03,1 Pembukaan,"Sampah menumpuk, polusi udara menebal, dan energi kabupaten mulai krisis.","Video pembuka, sinkron dengan teks ke-3"
+opening-04,1 Pembukaan,Kabupaten Eco Nusa membutuhkan sosok Bupati Cilik yang berani dan bijak untuk menyelamatkan wilayah ini!,"Video pembuka, sinkron dengan teks ke-4"
+char-01,2 Pemilihan karakter,Pilih karaktermu! Ketuk Bupati Cilik laki-laki atau Bupati Cilik perempuan.,Langkah 1 pendaftaran
+id-01,3 Identitas,"Isi identitasmu! Tulis nama lengkap, kelas, dan nomor absen, lalu tekan Lanjut.",Langkah 2 pendaftaran
+oath-01,4 Janji,"Halo, Bupati Cilik! Selamat atas pelantikanmu. Aku akan menemanimu menjalankan misi menjaga dan menyelamatkan Kabupaten Eco Nusa. Siap memulai tugasmu?",Dialog Janji baris 1
+oath-02,4 Janji,"Sebelum berangkat, yuk baca janji Bupati Cilik di bawah ini dengan teliti.",Dialog Janji baris 2
+oath-03,4 Janji,Sudah siap? Tekan tombol hijau untuk masuk ke peta!,Dialog Janji baris 3
+oath-04,4 Janji,"Sebagai Bupati Cilik Peduli Lingkungan, ucapkan janji berikut dengan sungguh-sungguh. Ingat, seorang pemimpin harus memberi teladan melalui tindakan nyata!",Tombol ulang / pembacaan kotak Janji
+oath-p1,4 Janji,Memilah dan mengelola sampah kabupaten dengan bijak.,Butir janji 1 (dibaca berurutan setelah oath-04)
+oath-p2,4 Janji,Menghemat energi dan memanfaatkan energi terbarukan.,Butir janji 2 (dibaca berurutan setelah oath-04)
+oath-p3,4 Janji,Menjaga tata wilayah yang asri dan melestarikan hijau lingkungan.,Butir janji 3 (dibaca berurutan setelah oath-04)
+oath-p4,4 Janji,Menggunakan transportasi ramah lingkungan.,Butir janji 4 (dibaca berurutan setelah oath-04)
+oath-p5,4 Janji,Menjadi teladan kebiasaan hijau di sekolah dan lingkungan.,Butir janji 5 (dibaca berurutan setelah oath-04)
+map-01,5 Peta,"Selamat datang di Peta Kabupaten Eco Nusa, Bupati Cilik!",Peta tampil pertama kali
+map-02,5 Peta,Ayo mulai dari Misi 1: Zona Sampah!,"Peta, belum ada zona selesai"
+map-next-2,5 Peta,Ayo lanjut ke Misi 2: Zona Energi!,"Peta, misi 2 berikutnya"
+map-next-3,5 Peta,Ayo lanjut ke Misi 3: Zona Tata Wilayah!,"Peta, misi 3 berikutnya"
+map-next-4,5 Peta,Ayo lanjut ke Misi 4: Zona Transportasi!,"Peta, misi 4 berikutnya"
+map-next-5,5 Peta,Ayo lanjut ke Misi 5: Zona Sekolah Berkelanjutan!,"Peta, misi 5 berikutnya"
+zone1-intro,6 Petunjuk zona,"Misi 1: Zona Sampah. Klik sampah yang ingin dipilah, lalu klik tempat sampah yang tepat!",Petunjuk saat Zona 1 dibuka
+zone2-intro,6 Petunjuk zona,Misi 2: Zona Energi. Pilih 5 sumber energi ramah lingkungan dari 8 pilihan untuk menyalakan 5 lampu kabupaten Eco Nusa!,Petunjuk saat Zona 2 dibuka
+zone3-intro,6 Petunjuk zona,Misi 3: Zona Tata Wilayah. Atasi 5 masalah tata wilayah Eco Nusa dengan memilih solusi yang paling tepat!,Petunjuk saat Zona 3 dibuka
+zone4-intro,6 Petunjuk zona,Misi 4: Zona Transportasi. Jawab pertanyaan seputar transportasi kabupaten dengan tepat!,Petunjuk saat Zona 4 dibuka
+zone5-intro,6 Petunjuk zona,Misi 5: Zona Sekolah Berkelanjutan. Jawab 5 soal pembiasaan hijau sekolah untuk memulihkan langit kabupaten dari gelap menjadi biru asri!,Petunjuk saat Zona 5 dibuka
+zone1-wrong,7 Umpan balik,"Belum tepat. Coba pikirkan lagi jenis sampahnya, lalu pilih tempat sampah yang sesuai!","Zona 1 salah memilah (generik, tanpa nama sampah)"
+zone1-right,7 Umpan balik,Tepat sekali! Sampah masuk ke tempat yang benar.,Zona 1 benar memilah
+zone2-right,7 Umpan balik,Pilihan yang bagus! Energi bersih menyalakan lampu kabupaten.,Zona 2 benar
+zone2-wrong,7 Umpan balik,Belum tepat. Energi itu masih mencemari lingkungan. Pilih energi yang ramah lingkungan!,Zona 2 salah
+zone3-right,7 Umpan balik,Benar! Solusi itu tepat untuk masalah ini.,Zona 3 benar
+zone3-wrong,7 Umpan balik,Belum tepat. Coba pilih solusi yang lebih sesuai dengan masalahnya.,Zona 3 salah
+zone4-wrong,7 Umpan balik,"Salah, kurangi 10 poin. Simak penjelasannya ya.",Zona 4 salah (awalan penjelasan)
+zone4-right,7 Umpan balik,"Benar, tambah 20 poin!",Zona 4 benar (awalan penjelasan)
+zone5-wrong,7 Umpan balik,"Salah, kurangi 10 poin. Simak penjelasannya ya.",Zona 5 salah (awalan penjelasan)
+zone5-right,7 Umpan balik,Benar!,Zona 5 benar (awalan penjelasan)
+zone3-p1,6b Soal & jawaban,Masalah Kemacetan dan Polusi Udara di Pusat Kabupaten.,"Zona 3, membaca masalah"
+zone3-ssol-1,6b Soal & jawaban,Solusi: Bus Listrik dan Jalur Sepeda Khusus.,"Zona 3, membaca solusi"
+zone3-p2,6b Soal & jawaban,Masalah Sampah Menumpuk dan Mengotori Pemukiman.,"Zona 3, membaca masalah"
+zone3-ssol-2,6b Soal & jawaban,Solusi: Bank Sampah dan Kompos Terpadu.,"Zona 3, membaca solusi"
+zone3-p3,6b Soal & jawaban,Masalah Banjir Genangan Air Saat Musim Hujan.,"Zona 3, membaca masalah"
+zone3-ssol-3,6b Soal & jawaban,Solusi: Biopori dan Pembuatan Taman Kabupaten.,"Zona 3, membaca solusi"
+zone3-p4,6b Soal & jawaban,Masalah Krisis Ruang Hijau dan Suhu Wilayah Panas.,"Zona 3, membaca masalah"
+zone3-ssol-4,6b Soal & jawaban,Solusi: Penanaman 1000 Pohon Pelindung Jalan.,"Zona 3, membaca solusi"
+zone3-p5,6b Soal & jawaban,Masalah Pemborosan Air Bersih di Fasilitas Umum.,"Zona 3, membaca masalah"
+zone3-ssol-5,6b Soal & jawaban,Solusi: Keran Otomatis Sensor dan Pemanenan Air Hujan.,"Zona 3, membaca solusi"
+zone4-q1,6b Soal & jawaban,Jalanan Kabupaten Eco Nusa macet saat berangkat ke sekolah setiap pagi. Kendaraan apa yang paling baik digunakan bersama-sama untuk mengurangi kemacetan? Pilihan A: Menggunakan bus sekolah. Pilihan B: Menggunakan mobil pribadi. Pilihan C: Menggunakan motor pribadi.,"Zona 4, soal 1 + pilihan"
+zone4-e1,7 Umpan balik,Bus sekolah mampu mengurangi jumlah kendaraan di jalan.,"Zona 4, penjelasan soal 1"
+zone4-q2,6b Soal & jawaban,"Jalur pejalan kaki di pusat kabupaten sempit. Apa langkah bijak yang harus diambil? Pilihan A: Membangun fasilitas trotoar yang lebar, ramah disabilitas, dan dinaungi pepohonan. Pilihan B: Menghapuskan seluruh jalur pejalan kaki. Pilihan C: Mewajibkan warga berjalan kaki langsung di tengah jalan raya.","Zona 4, soal 2 + pilihan"
+zone4-e2,7 Umpan balik,Trotoar yang teduh mendorong warga berjalan kaki.,"Zona 4, penjelasan soal 2"
+zone4-q3,6b Soal & jawaban,"Setiap pagi, jalan menuju SD Eco Nusa macet. Banyak mobil hanya membawa satu orang sehingga antrean kendaraan semakin panjang. Kebijakan apa yang paling tepat kamu pilih? Pilihan A: Mengajak warga menggunakan bus bersama atau berbagi kendaraan. Pilihan B: Mendorong setiap keluarga menggunakan mobil sendiri. Pilihan C: Memperlebar jalan tanpa mengurangi jumlah kendaraan.","Zona 4, soal 3 + pilihan"
+zone4-e3,7 Umpan balik,Menggunakan bus bersama atau berbagi kendaraan dapat mengurai kemacetan,"Zona 4, penjelasan soal 3"
+zone4-q4,6b Soal & jawaban,Warga enggan beralih ke transportasi umum karena jadwal tidak pasti. Apa solusi yang bijak? Pilihan A: Mengembangkan sistem pelacakan jadwal bus secara real-time via aplikasi digital. Pilihan B: Menaikkan tarif tiket bus secara berkala untuk menambah pendapatan operasional. Pilihan C: Mengurangi jumlah halte pemberhentian agar rute perjalanan bus menjadi lebih pendek.,"Zona 4, soal 4 + pilihan"
+zone4-e4,7 Umpan balik,Informasi jadwal transparan membangun kepercayaan warga.,"Zona 4, penjelasan soal 4"
+zone4-q5,6b Soal & jawaban,Kawasan taman kabupaten sering sesak akibat maraknya parkir liar di bahu jalan. Kebijakan apa yang paling bijak? Pilihan A: Menetapkan zona bebas kendaraan bermotor (Car-Free Zone). Pilihan B: Mengizinkan parkir di ruang terbuka. Pilihan C: Membangun jembatan layang khusus kendaraan pribadi.,"Zona 4, soal 5 + pilihan"
+zone4-e5,7 Umpan balik,Zona bebas kendaraan menciptakan ruang publik bersih.,"Zona 4, penjelasan soal 5"
+zone5-q1,6b Soal & jawaban,Membawa botol minum sendiri dari rumah ke sekolah dapat mengurangi sampah plastik sekali pakai. Benar atau salah?,"Zona 5, soal 1"
+zone5-e1,7 Umpan balik,Tumbler isi ulang mengurangi ribuan botol plastik.,"Zona 5, penjelasan soal 1"
+zone5-q2,6b Soal & jawaban,Membiarkan lampu dan kipas angin kelas tetap menyala saat jam olahraga adalah tindakan hemat energi. Benar atau salah?,"Zona 5, soal 2"
+zone5-e2,7 Umpan balik,Matikan lampu saat ruangan kosong.,"Zona 5, penjelasan soal 2"
+zone5-q3,6b Soal & jawaban,Membawa bekal makanan menggunakan wadah makan berulang kali pakai. Benar atau salah?,"Zona 5, soal 3"
+zone5-e3,7 Umpan balik,Mencegah tumpukan bungkus plastik jajanan.,"Zona 5, penjelasan soal 3"
+zone5-q4,6b Soal & jawaban,Menanam dan merawat tanaman di kebun sekolah membantu menjaga udara sekolah tetap segar. Benar atau salah?,"Zona 5, soal 4"
+zone5-e4,7 Umpan balik,Tanaman menghasilkan oksigen bersih.,"Zona 5, penjelasan soal 4"
+zone5-q5,6b Soal & jawaban,Meninggalkan keran air di toilet sekolah terus menetas karena tidak berpengaruh pada kelestarian lingkungan. Benar atau salah?,"Zona 5, soal 5"
+zone5-e5,7 Umpan balik,Tetesan air membuang banyak air bersih.,"Zona 5, penjelasan soal 5"
+mission1-praise,8 Penyelesaian misi,"Hebat, Bupati Cilik! Kamu memilah sampah organik dan anorganik dengan benar. Skormu sudah tercatat!",Misi 1 lulus (skor 80 ke atas)
+mission1-env,8 Penyelesaian misi,Lihat! Langit Kabupaten Eco Nusa mulai terang.,"Misi 1 lulus, langit makin cerah"
+mission1-next,8 Penyelesaian misi,Ayo lanjut ke Misi 2: Zona Energi. Nyalakan lampu kabupaten dengan energi ramah lingkungan!,"Misi 1 lulus, ajakan lanjut"
+mission2-praise,8 Penyelesaian misi,"Luar biasa, Bupati Cilik! Lampu kabupaten menyala dengan energi bersih. Skormu sudah tercatat!",Misi 2 lulus (skor 80 ke atas)
+mission2-env,8 Penyelesaian misi,Awan mulai terbuka dan matahari pun muncul!,"Misi 2 lulus, langit makin cerah"
+mission2-next,8 Penyelesaian misi,Ayo lanjut ke Misi 3: Zona Tata Wilayah. Kita tata kabupaten agar lebih hijau!,"Misi 2 lulus, ajakan lanjut"
+mission3-praise,8 Penyelesaian misi,"Keren, Bupati Cilik! Tata wilayah Eco Nusa kini lebih rapi dan hijau. Skormu sudah tercatat!",Misi 3 lulus (skor 80 ke atas)
+mission3-env,8 Penyelesaian misi,Langit makin cerah dan pepohonan mulai menghijau!,"Misi 3 lulus, langit makin cerah"
+mission3-next,8 Penyelesaian misi,Ayo lanjut ke Misi 4: Zona Transportasi. Mari pilih transportasi yang bersih!,"Misi 3 lulus, ajakan lanjut"
+mission4-praise,8 Penyelesaian misi,"Mantap, Bupati Cilik! Transportasi kabupaten jadi lebih ramah lingkungan. Skormu sudah tercatat!",Misi 4 lulus (skor 80 ke atas)
+mission4-env,8 Penyelesaian misi,Langit biru terlihat jelas dan kota semakin bersih!,"Misi 4 lulus, langit makin cerah"
+mission4-next,8 Penyelesaian misi,Ayo lanjut ke Misi 5: Zona Sekolah Berkelanjutan. Ini misi terakhirmu!,"Misi 4 lulus, ajakan lanjut"
+mission5-praise,8 Penyelesaian misi,"Selamat, Bupati Cilik! Sekolah berkelanjutan berhasil kamu wujudkan. Skormu sudah tercatat!",Misi 5 lulus (skor 80 ke atas)
+mission5-env,8 Penyelesaian misi,"Kabupaten Eco Nusa kini cerah, hijau, bersih, dan nyaman. Kamu Bupati Cilik sejati!","Misi 5 lulus, langit makin cerah"
+mission5-next,8 Penyelesaian misi,Semua misi sudah selesai! Ayo ambil Sertifikat Resmi Bupati Cilik-mu!,"Misi 5 lulus, ajakan lanjut"
+mission-fail-1,8 Penyelesaian misi,"Belum berhasil kali ini, Bupati Cilik. Skor minimal agar lulus adalah 80 poin, tapi jangan menyerah!",Zona belum lulus
+mission-fail-2,8 Penyelesaian misi,"Pelajari lagi dengan teliti, lalu coba sekali lagi. Aku yakin kamu pasti bisa!",Zona belum lulus
+map-done,8 Penyelesaian misi,"Luar biasa, Bupati Cilik! Semua misi selesai. Ambil Sertifikat Resmimu!","Peta, semua zona selesai"
+cert-01,9 Sertifikat & penutup,Selamat! Ini Sertifikat Resmi Bupati Cilik Peduli Lingkungan. Lihat rincian nilaimu di zona-zona yang sudah kamu selesaikan.,Sertifikat tampil
+cert-02,9 Sertifikat & penutup,"Terima kasih sudah menjaga Kabupaten Eco Nusa. Mari terus menjaga lingkungan di sekolah dan di rumah! Gim ini dibuat oleh Duria Fikasari, S.Pd., dari SD Negeri Seloharjo.",Penutup sertifikat
+tap-01,10 Sapaan ketuk karakter,"Hai, Bupati Cilik!",Karakter diketuk (acak)
+tap-02,10 Sapaan ketuk karakter,"Semangat, Bupati Cilik!",Karakter diketuk (acak)
+tap-03,10 Sapaan ketuk karakter,Ayo jaga lingkungan kita!,Karakter diketuk (acak)
+tap-04,10 Sapaan ketuk karakter,Eco Nusa butuh kamu!,Karakter diketuk (acak)
+tap-05,10 Sapaan ketuk karakter,"Kamu hebat, Bupati Cilik!",Karakter diketuk (acak)
