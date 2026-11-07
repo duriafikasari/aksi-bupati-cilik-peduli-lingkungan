@@ -1,0 +1,45 @@
+PAPAN SKOR ONLINE (GOOGLE SHEETS) - AKSI BUPATI CILIK PEDULI LINGKUNGAN
+=======================================================================
+Fungsi: data murid (nama, asal sekolah, kelas, absen, nilai per zona, total) dari SEMUA perangkat
+terkumpul di satu Google Sheets milik guru, dan ditampilkan sebagai papan skor bersama di gim. Fitur ini OPSIONAL. Tanpa pengaturan ini gim tetap jalan
+dan papan skor 🏆 tetap menyimpan data di perangkat masing-masing.
+
+SEBELUM MEMULAI - PERLU DIPERTIMBANGKAN
+- Nama dan asal sekolah murid akan dikirim ke Google Sheets Anda. Mintalah izin sekolah/orang tua sesuai aturan sekolah.
+- PAPAN SKOR BERSAMA: gim membaca daftar murid dari Sheet agar semua pemain melihat nilai semua murid (tab "Semua murid" di 🏆).
+  Yang tampil ke SEMUA orang yang membuka URL skrip: NAMA LENGKAP, asal sekolah, kelas, nilai per zona, total.
+  No. Absen dan data lain di Sheet TIDAK ikut. Ini data anak: pastikan ada izin sekolah/orang tua.
+  Untuk menutup daftar ini kapan saja: di Code.gs ubah  var TAMPILKAN_DAFTAR = true;  menjadi  false  lalu buat penerapan baru.
+  Alamat ini juga terlihat publik jika gim di GitHub, sehingga siapa pun yang menemukan URL dapat membaca daftar tersebut.
+- URL Web App tersimpan di config-papan-skor.js. Jika gim dipublikasikan di GitHub, URL itu terlihat publik dan siapa pun yang
+  tahu URL dapat mengirim baris palsu ke Sheet. Skrip membatasi panjang dan isi data, tetapi tidak bisa memastikan siapa pengirimnya.
+  Jangan bagikan Sheet-nya dan periksa datanya sebelum dipakai untuk penilaian.
+- Perlu internet. Bila murid bermain tanpa internet, data diantrekan di perangkat dan dikirim otomatis saat online
+  (selama peramban/data situsnya tidak dihapus).
+
+LANGKAH PEMASANGAN (sekitar 5 menit)
+1. Buka https://sheets.google.com , buat spreadsheet baru, beri nama misalnya "Papan Skor Bupati Cilik".
+2. Menu: Ekstensi (Extensions) > Apps Script.
+3. Hapus semua kode contoh di editor, lalu salin-tempel SELURUH isi file google-sheets/Code.gs.
+4. Klik ikon simpan (Ctrl+S).
+5. Klik Terapkan (Deploy) > Penerapan baru (New deployment) > ikon roda gigi > pilih "Aplikasi web" (Web app).
+   - Jalankan sebagai (Execute as): Saya (Me)
+   - Siapa yang memiliki akses (Who has access): Siapa saja (Anyone)
+6. Klik Terapkan. Saat diminta, beri otorisasi akun Google Anda. Bila muncul peringatan "Google belum memverifikasi aplikasi ini",
+   pilih Lanjutan (Advanced) > Buka ... (tidak aman) - ini skrip milik Anda sendiri.
+7. Salin "URL aplikasi web" yang berakhiran /exec .
+8. Buka file config-papan-skor.js di folder gim (pakai Notepad), tempel URL di antara tanda kutip:
+      window.PAPAN_SKOR_URL = 'https://script.google.com/macros/s/AKfy.../exec';
+   Simpan. Ulangi untuk salinan gim yang Anda publikasikan (GitHub).
+9. Uji: buka gim, daftar dengan nama uji, selesaikan Zona 1, lalu lihat Sheet. Tab "PapanSkor" terbentuk otomatis dan baris murid muncul
+   (tab ini dibuat otomatis saat data pertama masuk). Di gim, 🏆 menampilkan "Google Sheets: semua data sudah terkirim".
+
+CATATAN
+- Daftar bersama dimuat dari Sheet dengan jeda sampai ~20 detik (cache); tekan ↻ di 🏆 untuk memuat ulang.
+- Satu murid = satu baris (kunci: nama + asal sekolah + kelas + absen). Baris diperbarui tiap zona selesai.
+  Nama yang dieja berbeda dianggap murid lain.
+- Kolom A (Kunci) dipakai sistem; boleh disembunyikan, jangan diubah.
+- Bila Code.gs diubah, buat penerapan baru: Terapkan > Kelola penerapan > ikon pensil > Versi: Versi baru > Terapkan.
+  URL tetap sama.
+- Bila status di 🏆 menyebut "menunggu terkirim", cek internet dan pastikan akses penerapan = "Siapa saja".
+- Untuk berhenti memakai fitur ini, kosongkan URL di config-papan-skor.js.
