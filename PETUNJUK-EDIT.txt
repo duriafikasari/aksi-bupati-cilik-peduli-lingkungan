@@ -24,18 +24,17 @@ MENGEDIT TEKS (cari dengan Ctrl+F di Notepad)
   - Soal Zona 4 dan Zona 5      : cari  zone4Questions dan schoolQuestions
   - Ucapan selesai misi         : cari  PRAISE
 
-NARASI SUARA (Web Speech API bawaan peramban)
-  - Narasi dibacakan langsung oleh peramban (speechSynthesis). Tidak ada file MP3 narasi, API key, atau Python.
-  - Teks yang dibacakan ada di index.html, objek Voice -> TEXT (id: teks). Ubah teksnya di sana bila perlu.
-  - Karakter laki-laki memakai voice laki-laki Indonesia, perempuan memakai voice perempuan Indonesia - JIKA perangkat punya.
-    Bila tidak ada, dipakai voice Indonesia yang tersedia dan game menampilkan pemberitahuan.
+NARASI SUARA
+  - Karakter LAKI-LAKI: memakai rekaman MP3 di assets/audio/voice/laki-laki/ (nama file = id klip, mis. cover-01.mp3; daftar id di naskah/naskah-narasi.csv).
+    Bila sebuah MP3 tidak ada, klip itu otomatis dibacakan suara perangkat. Mengganti rekaman = timpa file dengan nama yang sama.
+  - Karakter PEREMPUAN: memakai suara perangkat (Web Speech API bawaan peramban; di Edge biasanya Gadis, di Chrome Google). Tidak ada API key atau Python.
+  - Teks untuk suara perangkat ada di index.html, objek Voice -> TEXT (id: teks).
   - Tombol 🗣️ (kanan bawah) = narasi aktif/mati. Tombol 🔁 = ulangi narasi. Tombol 🎚️ = volume + Periksa Voice Perangkat.
-  - Periksa voice: buka cek-voice.html atau 🎚️ -> "Periksa voice perangkat".
-
-SIMPAN FILE dengan encoding UTF-8 agar huruf dan emoji tidak rusak.
-Sebelum mengedit, salin dulu folder ini sebagai cadangan.
+  - Periksa voice perangkat: buka cek-voice.html atau 🎚️ -> "Periksa voice perangkat".
+  - Catatan: huruf judul (Fredoka/Inter) dimuat dari Google Fonts; tanpa internet tampil dengan huruf cadangan.
 
 PAPAN SKOR & SERTIFIKAT
   - Tombol 🏆 (kanan bawah) membuka Papan Skor: nama, asal sekolah, kelas, nilai tiap zona, total. Dapat diunduh sebagai CSV (Excel).
   - Data papan skor tersimpan di peramban perangkat yang dipakai bermain (tidak ada server). Menghapus data situs/riwayat peramban menghapus papan skor.
   - Tanggal & jam di sertifikat otomatis sesuai waktu perangkat saat murid menyelesaikan semua zona.
+  - Opsional: papan skor ONLINE ke Google Sheets (data semua perangkat terkumpul). Lihat google-sheets/PETUNJUK-GOOGLE-SHEETS.txt dan config-papan-skor.js.

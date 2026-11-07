@@ -853,8 +853,14 @@ body:has(#screen-cover:not(.hidden)) .sb-fab { right: 154px; }
   .audio-fab { right: 54px; } .vtog-fab { right: 88px; } .voice-fab { right: 122px; } .sb-fab { right: 156px; }
   body:has(#screen-cover:not(.hidden)) .vtog-fab { right: 54px; } body:has(#screen-cover:not(.hidden)) .voice-fab { right: 88px; } body:has(#screen-cover:not(.hidden)) .sb-fab { right: 122px; }
 }
+
+.sb-tabs { display: flex; gap: 6px; margin: 6px 0; }
+.sb-tabs button { padding: 6px 10px; border-radius: 10px; border: 1px solid #475569; background: #1e293b; color: #e2e8f0; font-size: 12px; cursor: pointer; }
+.sb-tabs button.on { background: #b45309; border-color: #fbbf24; color: #fff; font-weight: 700; }
+.sb-tabs button:focus-visible { outline: 3px solid #fbbf24; outline-offset: 2px; }
   </style>
   <link rel="stylesheet" href="css/tailwind.css">
+  <script src="config-papan-skor.js"></script>
 </head>
 <body class="min-h-screen flex flex-col justify-between bg-slate-900 text-slate-100">
   <div id="zoneBg" aria-hidden="true"></div>
@@ -1462,6 +1468,8 @@ body:has(#screen-cover:not(.hidden)) .sb-fab { right: 154px; }
     <div class="ap-head"><strong>🏆 Papan Skor</strong><button id="sbClose" type="button" aria-label="Tutup">✕</button></div>
     <p class="ap-note">Data tersimpan di peramban perangkat ini saja. Urutan dari total skor tertinggi. “-” = zona belum selesai.</p>
     <div class="sb-wrap"><table class="sb-tbl"><thead><tr><th>#</th><th class="l">Nama</th><th class="l">Asal Sekolah</th><th>Kelas</th><th>Z1<br>Sampah</th><th>Z2<br>Energi</th><th>Z3<br>Tata Wil.</th><th>Z4<br>Transp.</th><th>Z5<br>Sekolah</th><th>Total</th><th>Zona</th></tr></thead><tbody id="sbBody"></tbody></table></div>
+    <div id="sbTabs" class="sb-tabs hidden"><button id="sbTabAll" type="button">🌐 Semua murid</button><button id="sbTabLocal" type="button">📱 Perangkat ini</button><button id="sbReload" type="button" title="Muat ulang">↻</button></div>
+    <p id="sbSync" class="ap-note"></p>
     <p id="sbEmpty" class="ap-note hidden">Belum ada data. Selesaikan minimal satu zona agar nama muncul di sini.</p>
     <div class="vc-actions"><button id="sbCsv" type="button">⬇ Unduh CSV (Excel)</button></div>
   </div>
@@ -2519,7 +2527,7 @@ body:has(#screen-cover:not(.hidden)) .sb-fab { right: 154px; }
     const Voice = {
       DEFAULT_WHO: 'laki-laki',            // dipakai hanya sebelum pemain memilih karakter (cover, pembukaan)
       RATE: 1.3, PITCH: 1.08,             // ramah & ceria untuk anak SD; sama untuk kedua karakter (gender TIDAK dipalsukan lewat pitch)
-      TEXT: {"cover-01": "Selamat datang di Aksi Bupati Cilik Peduli Lingkungan! Tekan tombol Mulai Bermain untuk memulai petualanganmu.", "opening-01": "Selamat datang di Kabupaten Eco Nusa! Wilayah yang dahulu asri, hijau, dan penuh energi positif.", "opening-02": "Namun kini, Kabupaten Eco Nusa sedang mengalami berbagai masalah lingkungan yang serius!", "opening-03": "Sampah menumpuk, polusi udara menebal, dan energi kabupaten mulai krisis.", "opening-04": "Kabupaten Eco Nusa membutuhkan sosok Bupati Cilik yang berani dan bijak untuk menyelamatkan wilayah ini!", "char-01": "Pilih karaktermu! Ketuk Bupati Cilik laki-laki atau Bupati Cilik perempuan.", "id-01": "Isi identitasmu! Tulis nama lengkap, kelas, dan nomor absen, lalu tekan Lanjut.", "oath-01": "Halo, Bupati Cilik! Selamat atas pelantikanmu. Aku akan menemanimu menjalankan misi menjaga dan menyelamatkan Kabupaten Eco Nusa. Siap memulai tugasmu?", "oath-02": "Sebelum berangkat, yuk baca janji Bupati Cilik di bawah ini dengan teliti.", "oath-03": "Sudah siap? Tekan tombol hijau untuk masuk ke peta!", "oath-04": "Sebagai Bupati Cilik Peduli Lingkungan, ucapkan janji berikut dengan sungguh-sungguh. Ingat, seorang pemimpin harus memberi teladan melalui tindakan nyata!", "oath-p1": "Memilah dan mengelola sampah kabupaten dengan bijak.", "oath-p2": "Menghemat energi dan memanfaatkan energi terbarukan.", "oath-p3": "Menjaga tata wilayah yang asri dan melestarikan hijau lingkungan.", "oath-p4": "Menggunakan transportasi ramah lingkungan.", "oath-p5": "Menjadi teladan kebiasaan hijau di sekolah dan lingkungan.", "map-01": "Selamat datang di Peta Kabupaten Eco Nusa, Bupati Cilik!", "map-02": "Ayo mulai dari Misi 1: Zona Sampah!", "map-next-2": "Ayo lanjut ke Misi 2: Zona Energi!", "map-next-3": "Ayo lanjut ke Misi 3: Zona Tata Wilayah!", "map-next-4": "Ayo lanjut ke Misi 4: Zona Transportasi!", "map-next-5": "Ayo lanjut ke Misi 5: Zona Sekolah Berkelanjutan!", "zone1-intro": "Misi 1: Zona Sampah. Klik sampah yang ingin dipilah, lalu klik tempat sampah yang tepat!", "zone2-intro": "Misi 2: Zona Energi. Pilih 5 sumber energi ramah lingkungan dari 8 pilihan untuk menyalakan 5 lampu kabupaten Eco Nusa!", "zone3-intro": "Misi 3: Zona Tata Wilayah. Atasi 5 masalah tata wilayah Eco Nusa dengan memilih solusi yang paling tepat!", "zone4-intro": "Misi 4: Zona Transportasi. Jawab pertanyaan seputar transportasi kabupaten dengan tepat!", "zone5-intro": "Misi 5: Zona Sekolah Berkelanjutan. Jawab 5 soal pembiasaan hijau sekolah untuk memulihkan langit kabupaten dari gelap menjadi biru asri!", "zone1-wrong": "Belum tepat. Coba pikirkan lagi jenis sampahnya, lalu pilih tempat sampah yang sesuai!", "zone1-right": "Tepat sekali! Sampah masuk ke tempat yang benar.", "zone2-right": "Pilihan yang bagus! Energi bersih menyalakan lampu kabupaten.", "zone2-wrong": "Belum tepat. Energi itu masih mencemari lingkungan. Pilih energi yang ramah lingkungan!", "zone3-right": "Benar! Solusi itu tepat untuk masalah ini.", "zone3-wrong": "Belum tepat. Coba pilih solusi yang lebih sesuai dengan masalahnya.", "zone4-wrong": "Salah, kurangi 10 poin. Simak penjelasannya ya.", "zone4-right": "Benar, tambah 20 poin!", "zone5-wrong": "Salah, kurangi 10 poin. Simak penjelasannya ya.", "zone5-right": "Benar!", "zone3-p1": "Masalah Kemacetan dan Polusi Udara di Pusat Kabupaten.", "zone3-ssol-1": "Solusi: Bus Listrik dan Jalur Sepeda Khusus.", "zone3-p2": "Masalah Sampah Menumpuk dan Mengotori Pemukiman.", "zone3-ssol-2": "Solusi: Bank Sampah dan Kompos Terpadu.", "zone3-p3": "Masalah Banjir Genangan Air Saat Musim Hujan.", "zone3-ssol-3": "Solusi: Biopori dan Pembuatan Taman Kabupaten.", "zone3-p4": "Masalah Krisis Ruang Hijau dan Suhu Wilayah Panas.", "zone3-ssol-4": "Solusi: Penanaman 1000 Pohon Pelindung Jalan.", "zone3-p5": "Masalah Pemborosan Air Bersih di Fasilitas Umum.", "zone3-ssol-5": "Solusi: Keran Otomatis Sensor dan Pemanenan Air Hujan.", "zone4-q1": "Jalanan Kabupaten Eco Nusa macet saat berangkat ke sekolah setiap pagi. Kendaraan apa yang paling baik digunakan bersama-sama untuk mengurangi kemacetan? Pilihan A: Menggunakan bus sekolah. Pilihan B: Menggunakan mobil pribadi. Pilihan C: Menggunakan motor pribadi.", "zone4-e1": "Bus sekolah mampu mengurangi jumlah kendaraan di jalan.", "zone4-q2": "Jalur pejalan kaki di pusat kabupaten sempit. Apa langkah bijak yang harus diambil? Pilihan A: Membangun fasilitas trotoar yang lebar, ramah disabilitas, dan dinaungi pepohonan. Pilihan B: Menghapuskan seluruh jalur pejalan kaki. Pilihan C: Mewajibkan warga berjalan kaki langsung di tengah jalan raya.", "zone4-e2": "Trotoar yang teduh mendorong warga berjalan kaki.", "zone4-q3": "Setiap pagi, jalan menuju SD Eco Nusa macet. Banyak mobil hanya membawa satu orang sehingga antrean kendaraan semakin panjang. Kebijakan apa yang paling tepat kamu pilih? Pilihan A: Mengajak warga menggunakan bus bersama atau berbagi kendaraan. Pilihan B: Mendorong setiap keluarga menggunakan mobil sendiri. Pilihan C: Memperlebar jalan tanpa mengurangi jumlah kendaraan.", "zone4-e3": "Menggunakan bus bersama atau berbagi kendaraan dapat mengurai kemacetan", "zone4-q4": "Warga enggan beralih ke transportasi umum karena jadwal tidak pasti. Apa solusi yang bijak? Pilihan A: Mengembangkan sistem pelacakan jadwal bus secara real-time via aplikasi digital. Pilihan B: Menaikkan tarif tiket bus secara berkala untuk menambah pendapatan operasional. Pilihan C: Mengurangi jumlah halte pemberhentian agar rute perjalanan bus menjadi lebih pendek.", "zone4-e4": "Informasi jadwal transparan membangun kepercayaan warga.", "zone4-q5": "Kawasan taman kabupaten sering sesak akibat maraknya parkir liar di bahu jalan. Kebijakan apa yang paling bijak? Pilihan A: Menetapkan zona bebas kendaraan bermotor (Car-Free Zone). Pilihan B: Mengizinkan parkir di ruang terbuka. Pilihan C: Membangun jembatan layang khusus kendaraan pribadi.", "zone4-e5": "Zona bebas kendaraan menciptakan ruang publik bersih.", "zone5-q1": "Membawa botol minum sendiri dari rumah ke sekolah dapat mengurangi sampah plastik sekali pakai. Benar atau salah?", "zone5-e1": "Tumbler isi ulang mengurangi ribuan botol plastik.", "zone5-q2": "Membiarkan lampu dan kipas angin kelas tetap menyala saat jam olahraga adalah tindakan hemat energi. Benar atau salah?", "zone5-e2": "Matikan lampu saat ruangan kosong.", "zone5-q3": "Membawa bekal makanan menggunakan wadah makan berulang kali pakai. Benar atau salah?", "zone5-e3": "Mencegah tumpukan bungkus plastik jajanan.", "zone5-q4": "Menanam dan merawat tanaman di kebun sekolah membantu menjaga udara sekolah tetap segar. Benar atau salah?", "zone5-e4": "Tanaman menghasilkan oksigen bersih.", "zone5-q5": "Meninggalkan keran air di toilet sekolah terus menetas karena tidak berpengaruh pada kelestarian lingkungan. Benar atau salah?", "zone5-e5": "Tetesan air membuang banyak air bersih.", "mission1-praise": "Hebat, Bupati Cilik! Kamu memilah sampah organik dan anorganik dengan benar. Skormu sudah tercatat!", "mission1-env": "Lihat! Langit Kabupaten Eco Nusa mulai terang.", "mission1-next": "Ayo lanjut ke Misi 2: Zona Energi. Nyalakan lampu kabupaten dengan energi ramah lingkungan!", "mission2-praise": "Luar biasa, Bupati Cilik! Lampu kabupaten menyala dengan energi bersih. Skormu sudah tercatat!", "mission2-env": "Awan mulai terbuka dan matahari pun muncul!", "mission2-next": "Ayo lanjut ke Misi 3: Zona Tata Wilayah. Kita tata kabupaten agar lebih hijau!", "mission3-praise": "Keren, Bupati Cilik! Tata wilayah Eco Nusa kini lebih rapi dan hijau. Skormu sudah tercatat!", "mission3-env": "Langit makin cerah dan pepohonan mulai menghijau!", "mission3-next": "Ayo lanjut ke Misi 4: Zona Transportasi. Mari pilih transportasi yang bersih!", "mission4-praise": "Mantap, Bupati Cilik! Transportasi kabupaten jadi lebih ramah lingkungan. Skormu sudah tercatat!", "mission4-env": "Langit biru terlihat jelas dan kota semakin bersih!", "mission4-next": "Ayo lanjut ke Misi 5: Zona Sekolah Berkelanjutan. Ini misi terakhirmu!", "mission5-praise": "Selamat, Bupati Cilik! Sekolah berkelanjutan berhasil kamu wujudkan. Skormu sudah tercatat!", "mission5-env": "Kabupaten Eco Nusa kini cerah, hijau, bersih, dan nyaman. Kamu Bupati Cilik sejati!", "mission5-next": "Semua misi sudah selesai! Ayo ambil Sertifikat Resmi Bupati Cilik-mu!", "mission-fail-1": "Belum berhasil kali ini, Bupati Cilik. Skor minimal agar lulus adalah 80 poin, tapi jangan menyerah!", "mission-fail-2": "Pelajari lagi dengan teliti, lalu coba sekali lagi. Aku yakin kamu pasti bisa!", "map-done": "Luar biasa, Bupati Cilik! Semua misi selesai. Ambil Sertifikat Resmimu!", "cert-01": "Selamat! Ini Sertifikat Resmi Bupati Cilik Peduli Lingkungan. Lihat rincian nilaimu di zona-zona yang sudah kamu selesaikan.", "cert-02": "Terima kasih sudah menjaga Kabupaten Eco Nusa. Mari terus menjaga lingkungan di sekolah dan di rumah! Gim ini dibuat oleh Duria Fikasari, S.Pd., dari SD Negeri Seloharjo.", "tap-01": "Hai, Bupati Cilik!", "tap-02": "Semangat, Bupati Cilik!", "tap-03": "Ayo jaga lingkungan kita!", "tap-04": "Eco Nusa butuh kamu!", "tap-05": "Kamu hebat, Bupati Cilik!"},                // naskah per klip (sama dengan teks yang tampil, kecuali nama/skor)
+      TEXT: {"cover-01": "Selamat datang di Aksi Bupati Cilik Peduli Lingkungan! Tekan tombol Mulai Bermain untuk memulai petualanganmu.", "opening-01": "Selamat datang di Kabupaten Eco Nusa! Wilayah yang dahulu asri, hijau, dan penuh energi positif.", "opening-02": "Namun kini, Kabupaten Eco Nusa sedang mengalami berbagai masalah lingkungan yang serius!", "opening-03": "Sampah menumpuk, polusi udara menebal, dan energi kabupaten mulai krisis.", "opening-04": "Kabupaten Eco Nusa membutuhkan sosok Bupati Cilik yang berani dan bijak untuk menyelamatkan wilayah ini!", "char-01": "Pilih karaktermu! Ketuk Bupati Cilik laki-laki atau Bupati Cilik perempuan.", "id-01": "Isi identitasmu! Tulis nama lengkap, asal sekolah, kelas, dan nomor absen, lalu tekan Lanjut.", "oath-01": "Halo, Bupati Cilik! Selamat atas pelantikanmu. Aku akan menemanimu menjalankan misi menjaga dan menyelamatkan Kabupaten Eco Nusa. Siap memulai tugasmu?", "oath-02": "Sebelum berangkat, yuk baca janji Bupati Cilik di bawah ini dengan teliti.", "oath-03": "Sudah siap? Tekan tombol hijau untuk masuk ke peta!", "oath-04": "Sebagai Bupati Cilik Peduli Lingkungan, ucapkan janji berikut dengan sungguh-sungguh. Ingat, seorang pemimpin harus memberi teladan melalui tindakan nyata!", "oath-p1": "Memilah dan mengelola sampah kabupaten dengan bijak.", "oath-p2": "Menghemat energi dan memanfaatkan energi terbarukan.", "oath-p3": "Menjaga tata wilayah yang asri dan melestarikan hijau lingkungan.", "oath-p4": "Menggunakan transportasi ramah lingkungan.", "oath-p5": "Menjadi teladan kebiasaan hijau di sekolah dan lingkungan.", "map-01": "Selamat datang di Peta Kabupaten Eco Nusa, Bupati Cilik!", "map-02": "Ayo mulai dari Misi 1: Zona Sampah!", "map-next-2": "Ayo lanjut ke Misi 2: Zona Energi!", "map-next-3": "Ayo lanjut ke Misi 3: Zona Tata Wilayah!", "map-next-4": "Ayo lanjut ke Misi 4: Zona Transportasi!", "map-next-5": "Ayo lanjut ke Misi 5: Zona Sekolah Berkelanjutan!", "zone1-intro": "Misi 1: Zona Sampah. Klik sampah yang ingin dipilah, lalu klik tempat sampah yang tepat!", "zone2-intro": "Misi 2: Zona Energi. Pilih 5 sumber energi ramah lingkungan dari 8 pilihan untuk menyalakan 5 lampu kabupaten Eco Nusa!", "zone3-intro": "Misi 3: Zona Tata Wilayah. Atasi 5 masalah tata wilayah Eco Nusa dengan memilih solusi yang paling tepat!", "zone4-intro": "Misi 4: Zona Transportasi. Jawab pertanyaan seputar transportasi kabupaten dengan tepat!", "zone5-intro": "Misi 5: Zona Sekolah Berkelanjutan. Jawab 5 soal pembiasaan hijau sekolah untuk memulihkan langit kabupaten dari gelap menjadi biru asri!", "zone1-wrong": "Belum tepat. Coba pikirkan lagi jenis sampahnya, lalu pilih tempat sampah yang sesuai!", "zone1-right": "Tepat sekali! Sampah masuk ke tempat yang benar.", "zone2-right": "Pilihan yang bagus! Energi bersih menyalakan lampu kabupaten.", "zone2-wrong": "Belum tepat. Energi itu masih mencemari lingkungan. Pilih energi yang ramah lingkungan!", "zone3-right": "Benar! Solusi itu tepat untuk masalah ini.", "zone3-wrong": "Belum tepat. Coba pilih solusi yang lebih sesuai dengan masalahnya.", "zone4-wrong": "Salah, kurangi 10 poin. Simak penjelasannya ya.", "zone4-right": "Benar, tambah 20 poin!", "zone5-wrong": "Salah, kurangi 10 poin. Simak penjelasannya ya.", "zone5-right": "Benar!", "zone3-p1": "Masalah Kemacetan dan Polusi Udara di Pusat Kabupaten.", "zone3-ssol-1": "Solusi: Bus Listrik dan Jalur Sepeda Khusus.", "zone3-p2": "Masalah Sampah Menumpuk dan Mengotori Pemukiman.", "zone3-ssol-2": "Solusi: Bank Sampah dan Kompos Terpadu.", "zone3-p3": "Masalah Banjir Genangan Air Saat Musim Hujan.", "zone3-ssol-3": "Solusi: Biopori dan Pembuatan Taman Kabupaten.", "zone3-p4": "Masalah Krisis Ruang Hijau dan Suhu Wilayah Panas.", "zone3-ssol-4": "Solusi: Penanaman 1000 Pohon Pelindung Jalan.", "zone3-p5": "Masalah Pemborosan Air Bersih di Fasilitas Umum.", "zone3-ssol-5": "Solusi: Keran Otomatis Sensor dan Pemanenan Air Hujan.", "zone4-q1": "Jalanan Kabupaten Eco Nusa macet saat berangkat ke sekolah setiap pagi. Kendaraan apa yang paling baik digunakan bersama-sama untuk mengurangi kemacetan? Pilihan A: Menggunakan bus sekolah. Pilihan B: Menggunakan mobil pribadi. Pilihan C: Menggunakan motor pribadi.", "zone4-e1": "Bus sekolah mampu mengurangi jumlah kendaraan di jalan.", "zone4-q2": "Jalur pejalan kaki di pusat kabupaten sempit. Apa langkah bijak yang harus diambil? Pilihan A: Membangun fasilitas trotoar yang lebar, ramah disabilitas, dan dinaungi pepohonan. Pilihan B: Menghapuskan seluruh jalur pejalan kaki. Pilihan C: Mewajibkan warga berjalan kaki langsung di tengah jalan raya.", "zone4-e2": "Trotoar yang teduh mendorong warga berjalan kaki.", "zone4-q3": "Setiap pagi, jalan menuju SD Eco Nusa macet. Banyak mobil hanya membawa satu orang sehingga antrean kendaraan semakin panjang. Kebijakan apa yang paling tepat kamu pilih? Pilihan A: Mengajak warga menggunakan bus bersama atau berbagi kendaraan. Pilihan B: Mendorong setiap keluarga menggunakan mobil sendiri. Pilihan C: Memperlebar jalan tanpa mengurangi jumlah kendaraan.", "zone4-e3": "Menggunakan bus bersama atau berbagi kendaraan dapat mengurai kemacetan", "zone4-q4": "Warga enggan beralih ke transportasi umum karena jadwal tidak pasti. Apa solusi yang bijak? Pilihan A: Mengembangkan sistem pelacakan jadwal bus secara real-time via aplikasi digital. Pilihan B: Menaikkan tarif tiket bus secara berkala untuk menambah pendapatan operasional. Pilihan C: Mengurangi jumlah halte pemberhentian agar rute perjalanan bus menjadi lebih pendek.", "zone4-e4": "Informasi jadwal transparan membangun kepercayaan warga.", "zone4-q5": "Kawasan taman kabupaten sering sesak akibat maraknya parkir liar di bahu jalan. Kebijakan apa yang paling bijak? Pilihan A: Menetapkan zona bebas kendaraan bermotor (Car-Free Zone). Pilihan B: Mengizinkan parkir di ruang terbuka. Pilihan C: Membangun jembatan layang khusus kendaraan pribadi.", "zone4-e5": "Zona bebas kendaraan menciptakan ruang publik bersih.", "zone5-q1": "Membawa botol minum sendiri dari rumah ke sekolah dapat mengurangi sampah plastik sekali pakai. Benar atau salah?", "zone5-e1": "Tumbler isi ulang mengurangi ribuan botol plastik.", "zone5-q2": "Membiarkan lampu dan kipas angin kelas tetap menyala saat jam olahraga adalah tindakan hemat energi. Benar atau salah?", "zone5-e2": "Matikan lampu saat ruangan kosong.", "zone5-q3": "Membawa bekal makanan menggunakan wadah makan berulang kali pakai. Benar atau salah?", "zone5-e3": "Mencegah tumpukan bungkus plastik jajanan.", "zone5-q4": "Menanam dan merawat tanaman di kebun sekolah membantu menjaga udara sekolah tetap segar. Benar atau salah?", "zone5-e4": "Tanaman menghasilkan oksigen bersih.", "zone5-q5": "Meninggalkan keran air di toilet sekolah terus menetas karena tidak berpengaruh pada kelestarian lingkungan. Benar atau salah?", "zone5-e5": "Tetesan air membuang banyak air bersih.", "mission1-praise": "Hebat, Bupati Cilik! Kamu memilah sampah organik dan anorganik dengan benar. Skormu sudah tercatat!", "mission1-env": "Lihat! Langit Kabupaten Eco Nusa mulai terang.", "mission1-next": "Ayo lanjut ke Misi 2: Zona Energi. Nyalakan lampu kabupaten dengan energi ramah lingkungan!", "mission2-praise": "Luar biasa, Bupati Cilik! Lampu kabupaten menyala dengan energi bersih. Skormu sudah tercatat!", "mission2-env": "Awan mulai terbuka dan matahari pun muncul!", "mission2-next": "Ayo lanjut ke Misi 3: Zona Tata Wilayah. Kita tata kabupaten agar lebih hijau!", "mission3-praise": "Keren, Bupati Cilik! Tata wilayah Eco Nusa kini lebih rapi dan hijau. Skormu sudah tercatat!", "mission3-env": "Langit makin cerah dan pepohonan mulai menghijau!", "mission3-next": "Ayo lanjut ke Misi 4: Zona Transportasi. Mari pilih transportasi yang bersih!", "mission4-praise": "Mantap, Bupati Cilik! Transportasi kabupaten jadi lebih ramah lingkungan. Skormu sudah tercatat!", "mission4-env": "Langit biru terlihat jelas dan kota semakin bersih!", "mission4-next": "Ayo lanjut ke Misi 5: Zona Sekolah Berkelanjutan. Ini misi terakhirmu!", "mission5-praise": "Selamat, Bupati Cilik! Sekolah berkelanjutan berhasil kamu wujudkan. Skormu sudah tercatat!", "mission5-env": "Kabupaten Eco Nusa kini cerah, hijau, bersih, dan nyaman. Kamu Bupati Cilik sejati!", "mission5-next": "Semua misi sudah selesai! Ayo ambil Sertifikat Resmi Bupati Cilik-mu!", "mission-fail-1": "Belum berhasil kali ini, Bupati Cilik. Skor minimal agar lulus adalah 80 poin, tapi jangan menyerah!", "mission-fail-2": "Pelajari lagi dengan teliti, lalu coba sekali lagi. Aku yakin kamu pasti bisa!", "map-done": "Luar biasa, Bupati Cilik! Semua misi selesai. Ambil Sertifikat Resmimu!", "cert-01": "Selamat! Ini Sertifikat Resmi Bupati Cilik Peduli Lingkungan. Lihat rincian nilaimu di zona-zona yang sudah kamu selesaikan.", "cert-02": "Terima kasih sudah menjaga Kabupaten Eco Nusa. Mari terus menjaga lingkungan di sekolah dan di rumah! Gim ini dibuat oleh Duria Fikasari, S.Pd., dari SD Negeri Seloharjo.", "tap-01": "Hai, Bupati Cilik!", "tap-02": "Semangat, Bupati Cilik!", "tap-03": "Ayo jaga lingkungan kita!", "tap-04": "Eco Nusa butuh kamu!", "tap-05": "Kamu hebat, Bupati Cilik!"},                // naskah per klip (sama dengan teks yang tampil, kecuali nama/skor)
       cur: null, tok: 0, replaySpec: null, played: [], noticed: {},
       on: true, supported: false, voices: [], map: null, manual: {},
 
@@ -2527,17 +2535,39 @@ body:has(#screen-cover:not(.hidden)) .sb-fab { right: 154px; }
       lastWho() { try { const v = localStorage.getItem('aksiBupatiVoiceWho'); return (v === 'laki-laki' || v === 'perempuan') ? v : ''; } catch (e) { return ''; } },
       rememberWho() { try { if (state.player.character) localStorage.setItem('aksiBupatiVoiceWho', state.player.character); } catch (e) { /* abaikan */ } },
       silent() { return AudioEngine.muted || Vol.voice <= 0; },
-      usable(id) { return this.supported && this.on && !!this.TEXT[id] && !this.silent(); },
+      // Karakter laki-laki memakai rekaman MP3 (assets/audio/voice/laki-laki/<id>.mp3) bila ada; selain itu suara perangkat (Web Speech).
+      MP3_DIR: 'assets/audio/voice/laki-laki/', mp3: {},
+      isMale() { return this.who() === 'laki-laki'; },
+      usable(id) { return (this.supported || this.isMale()) && this.on && !!this.TEXT[id] && !this.silent(); },
+      loadMp3(id) {                           // -> Promise<Audio|null>; hasil disimpan agar tidak dimuat ulang
+        if (this.mp3[id] !== undefined) return Promise.resolve(this.mp3[id]);
+        return (this.mp3[id] = new Promise(res => {
+          let a, done = false;
+          const fin = ok => { if (done) return; done = true; clearTimeout(t); if (!ok) { this.mp3[id] = null; res(null); } else { this.mp3[id] = a; res(a); } };
+          const t = setTimeout(() => fin(false), 2500);
+          try {
+            a = new Audio(); a.preload = 'auto';
+            a.addEventListener('loadedmetadata', () => fin(isFinite(a.duration) && a.duration > 0 && a.duration < 120));
+            a.addEventListener('error', () => fin(false));
+            a.src = this.MP3_DIR + id + '.mp3';
+          } catch (e) { fin(false); }
+        }));
+      },
       busy() { return !!this.cur; },
       _duck(on) { try { Music.duckV = !!on; Music.sync(); } catch (e) { /* abaikan */ } },
 
       // Perkiraan durasi (detik) - untuk mengatur kecepatan ketik teks di balon dialog. 0 bila narasi tidak dapat dibunyikan.
-      prepare(id) { return Promise.resolve(this.usable(id) ? Math.max(1.5, this.TEXT[id].length / 15.5) : 0); },
-      available(id) { return Promise.resolve(this.usable(id)); },
+      prepare(id) {
+        if (!this.usable(id)) return Promise.resolve(0);
+        const est = Math.max(1.5, this.TEXT[id].length / 15.5);
+        return this.isMale() ? this.loadMp3(id).then(a => (a ? a.duration : (this.supported ? est : 0))) : Promise.resolve(est);
+      },
+      available(id) { return this.prepare(id).then(d => d > 0); },
 
       stop() {
         this.tok++;
         try { if (this.supported) window.speechSynthesis.cancel(); } catch (e) { /* abaikan */ }
+        try { if (this.cur && this.cur.el) { this.cur.el.pause(); this.cur.el.currentTime = 0; } } catch (e) { /* abaikan */ }
         this.cur = null;
         this._duck(false);
       },
@@ -2558,12 +2588,29 @@ body:has(#screen-cover:not(.hidden)) .sb-fab { right: 154px; }
           };
           const step = () => {
             if (my !== this.tok) return resolve(false);
-            if (i >= ids.length || !this.supported || !this.on || this.silent()) return end();
+            if (i >= ids.length || !this.on || this.silent() || (!this.supported && !this.isMale())) return end();
             const id = ids[i++];
             if (!this.TEXT[id]) return step();
-            this.spoke = true; this.cur = { id, duration: Math.max(1.5, this.TEXT[id].length / 15.5), currentTime: 0 };
-            this._duck(true); n++; this.played.push(this.who() + '/' + id);
-            this.speak(this.TEXT[id], this.who(), my).then(() => { if (my === this.tok) setTimeout(step, 40); });
+            const who = this.who();
+            const viaTts = () => {
+              if (!this.supported) return step();
+              this.spoke = true; this.cur = { id, duration: Math.max(1.5, this.TEXT[id].length / 15.5), currentTime: 0 };
+              this._duck(true); n++; this.played.push(who + '/' + id + ':tts');
+              this.speak(this.TEXT[id], who, my).then(() => { if (my === this.tok) setTimeout(step, 40); });
+            };
+            if (who !== 'laki-laki') return viaTts();
+            this.loadMp3(id).then(a => {
+              if (my !== this.tok) return resolve(false);
+              if (!a) return viaTts();                       // MP3 belum ada -> suara perangkat
+              this.spoke = true; n++; this.played.push(who + '/' + id + ':mp3');
+              this.cur = { id, el: a, duration: a.duration, get currentTime() { return a.currentTime; } };
+              this._duck(true);
+              let fin = false;
+              const go = () => { if (fin) return; fin = true; clearTimeout(g); a.onended = a.onerror = null; if (my === this.tok) setTimeout(step, 60); };
+              const g = setTimeout(go, a.duration * 1000 + 3000);
+              a.onended = go; a.onerror = go;
+              try { a.volume = Vol.voice; a.currentTime = 0; const pr = a.play(); if (pr && pr.catch) pr.catch(() => go()); } catch (e) { go(); }
+            });
           };
           step();
         });
@@ -2749,7 +2796,6 @@ body:has(#screen-cover:not(.hidden)) .sb-fab { right: 154px; }
         const tog = document.getElementById('btnVoiceToggle');
         if (tog) {
           tog.addEventListener('click', () => { this.setOn(!this.on); AudioEngine.playClick(); });
-          if (!this.supported) tog.classList.add('hidden');
         }
         this.setOn(this.on);
         if (this.supported) {
@@ -2803,25 +2849,83 @@ body:has(#screen-cover:not(.hidden)) .sb-fab { right: 154px; }
       put(list) { try { localStorage.setItem(this.KEY, JSON.stringify(list)); } catch (e) { /* abaikan */ } },
       keyOf(p) { return [p.name, p.school || '', p.class, p.roll].map(x => String(x || '').trim().toLowerCase()).join('|'); },
       // Dipanggil setiap Progress.save(): perbarui/baris pemain ini
-      record() {
-        const p = state.player;
+      record(src) {
+        src = src || state;
+        const p = src.player;
         if (!p || !p.name) return;
-        const done = (state.completedZones || []).slice(0, 5);
+        const done = (src.completedZones || []).slice(0, 5);
         if (!done.some(Boolean)) return;
-        const scores = [0, 1, 2, 3, 4].map(i => done[i] ? (Number(state.zoneScores[i]) || 0) : null);
+        const scores = [0, 1, 2, 3, 4].map(i => done[i] ? (Number((src.zoneScores || [])[i]) || 0) : null);
         const total = scores.reduce((a, b) => a + (b || 0), 0);
         const row = { k: this.keyOf(p), name: p.name, school: p.school || '', cls: p.class, roll: p.roll, char: p.characterLabel || p.character || '',
           scores, total, done: done.filter(Boolean).length, finishedAt: p.finishedAt || null, at: new Date().toISOString() };
         const list = this.all(), i = list.findIndex(r => r.k === row.k);
         if (i >= 0) list[i] = row; else list.push(row);
         this.put(list);
+        try { this.queue(row); } catch (e) { /* abaikan */ }
         if (!document.getElementById('scoreboard').classList.contains('hidden')) this.render();
+      },
+      // ---------- Sinkron ke Google Sheets (opsional; URL diisi di config-papan-skor.js) ----------
+      QKEY: 'aksiBupatiSkorAntrian',
+      url() { return String(window.PAPAN_SKOR_URL || '').trim(); },
+      qGet() { try { const o = JSON.parse(localStorage.getItem(this.QKEY) || '{}'); return (o && typeof o === 'object') ? o : {}; } catch (e) { return {}; } },
+      qPut(o) { try { localStorage.setItem(this.QKEY, JSON.stringify(o)); } catch (e) { /* abaikan */ } },
+      queue(row) { if (!this.url()) return; const q = this.qGet(); q[row.k] = row; this.qPut(q); this.flush(); },
+      flushing: false, lastOk: null, lastErr: '',
+      flush() {
+        const u = this.url(); if (!u || this.flushing) return Promise.resolve();
+        const q = this.qGet(), keys = Object.keys(q); if (!keys.length) { this.syncUi(); return Promise.resolve(); }
+        this.flushing = true;
+        const sendOne = row => {
+          const body = JSON.stringify(row);
+          return fetch(u, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body, redirect: 'follow' })
+            .then(r => r.json()).then(j => { if (!j || j.ok !== true) throw new Error((j && j.error) || 'ditolak'); })
+            .catch(err => {   // CORS tertahan? kirim sekali lagi tanpa membaca balasan (aman: server memakai upsert)
+              if (err && err.message === 'ditolak') throw err;
+              return fetch(u, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body });
+            });
+        };
+        let chain = Promise.resolve();
+        keys.forEach(k => { chain = chain.then(() => sendOne(q[k]).then(() => { const cur = this.qGet(); if (cur[k] && cur[k].at === q[k].at) delete cur[k]; this.qPut(cur); this.lastOk = new Date(); this.lastErr = ''; })); });
+        return chain.catch(err => { this.lastErr = (err && err.message) || 'gagal'; }).then(() => { this.flushing = false; this.syncUi(); });
+      },
+      syncUi() {
+        const el = document.getElementById('sbSync'); if (!el) return;
+        if (this.view === 'all' && this.url()) { el.textContent = this.loadingRemote ? 'Memuat data dari Google Sheets...' : (this.remoteErr ? 'Gagal memuat (' + this.remoteErr + ').' : 'Data gabungan semua perangkat' + (this.remoteAt ? ' - dimuat ' + this.remoteAt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '.') : '') + '. Nilai murid yang baru selesai bisa tampil beberapa detik kemudian.'); return; }
+        if (!this.url()) { el.textContent = 'Penyimpanan: perangkat ini saja (Google Sheets belum disambungkan).'; return; }
+        const n = Object.keys(this.qGet()).length;
+        el.textContent = n ? `Google Sheets: ${n} data menunggu terkirim${this.lastErr ? ' (' + this.lastErr + ')' : ''}. Akan dicoba lagi saat online.` :
+          'Google Sheets: semua data sudah terkirim' + (this.lastOk ? ' (' + this.lastOk.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '.') + ')' : '') + '.';
       },
       sorted() { return this.all().slice().sort((a, b) => (b.total - a.total) || (b.done - a.done) || String(a.at).localeCompare(String(b.at))); },
       esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); },
+      // ---------- Papan skor bersama (membaca daftar dari Google Sheets) ----------
+      view: 'local', remote: null, remoteErr: '', loadingRemote: false,
+      loadRemote() {
+        const u = this.url(); if (!u) return Promise.resolve();
+        this.loadingRemote = true; this.syncUi(); this.render();
+        const ctl = ('AbortController' in window) ? new AbortController() : null, to = setTimeout(() => { if (ctl) ctl.abort(); }, 12000);
+        return fetch(u + (u.indexOf('?') < 0 ? '?' : '&') + 'aksi=papan', ctl ? { signal: ctl.signal } : {})
+          .then(r => r.json()).then(j => {
+            if (!j || j.ok !== true || !Array.isArray(j.daftar)) throw new Error((j && j.error) || 'balasan tidak valid');
+            this.remote = j.daftar.map(r => ({ name: String(r.nama || ''), school: String(r.sekolah || ''), cls: String(r.kelas || ''),
+              scores: [0, 1, 2, 3, 4].map(i => (r.zona && r.zona[i] != null && isFinite(r.zona[i])) ? Number(r.zona[i]) : null),
+              total: Number(r.total) || 0, done: parseInt(String(r.selesai || '0'), 10) || 0 }));
+            this.remoteErr = ''; this.remoteAt = new Date();
+          }).catch(err => { this.remoteErr = (err && err.name === 'AbortError') ? 'waktu habis' : ((err && err.message) || 'gagal'); })
+          .then(() => { clearTimeout(to); this.loadingRemote = false; this.syncUi(); this.render(); });
+      },
+      setView(v) {
+        this.view = v;
+        document.getElementById('sbTabAll').classList.toggle('on', v === 'all');
+        document.getElementById('sbTabLocal').classList.toggle('on', v === 'local');
+        if (v === 'all') this.loadRemote(); else { this.syncUi(); this.render(); }
+      },
       render() {
-        const rows = this.sorted(), body = document.getElementById('sbBody'), empty = document.getElementById('sbEmpty');
+        const showAll = this.view === 'all' && this.url();
+        const rows = showAll ? (this.remote || []) : this.sorted(), body = document.getElementById('sbBody'), empty = document.getElementById('sbEmpty');
         empty.classList.toggle('hidden', rows.length > 0);
+        empty.textContent = showAll ? (this.loadingRemote ? 'Memuat data semua murid...' : (this.remoteErr ? 'Data semua murid belum bisa dimuat (' + this.remoteErr + '). Tekan ↻ untuk mencoba lagi, atau lihat tab Perangkat ini.' : 'Belum ada data murid di Google Sheets.')) : 'Belum ada data. Selesaikan minimal satu zona agar nama muncul di sini.';
         body.innerHTML = rows.map((r, n) => `<tr><td>${n + 1}</td><td class="l">${this.esc(r.name)}</td><td class="l">${this.esc(r.school) || '-'}</td><td>${this.esc(r.cls)}</td>` +
           r.scores.map(v => `<td>${v == null ? '-' : v}</td>`).join('') + `<td><b>${r.total}</b></td><td>${r.done === 5 ? '✔' : r.done + '/5'}</td></tr>`).join('');
       },
@@ -2829,19 +2933,34 @@ body:has(#screen-cover:not(.hidden)) .sb-fab { right: 154px; }
       exportCsv() {
         const head = ['No', 'Nama', 'Asal Sekolah', 'Kelas', 'No. Absen', 'Zona Sampah', 'Zona Energi', 'Zona Tata Wilayah', 'Zona Transportasi', 'Zona Sekolah', 'Total', 'Zona Selesai', 'Waktu Selesai'];
         const lines = [head.map(h => this.csvCell(h)).join(';')];
-        this.sorted().forEach((r, n) => lines.push([n + 1, r.name, r.school, r.cls, r.roll, ...r.scores.map(v => v == null ? '' : v), r.total, r.done + '/5', r.finishedAt ? new Date(r.finishedAt).toLocaleString('id-ID') : ''].map(v => this.csvCell(v)).join(';')));
+        const src = (this.view === 'all' && this.url() && this.remote) ? this.remote : this.sorted();
+        src.forEach((r, n) => lines.push([n + 1, r.name, r.school, r.cls, r.roll, ...r.scores.map(v => v == null ? '' : v), r.total, r.done + '/5', r.finishedAt ? new Date(r.finishedAt).toLocaleString('id-ID') : ''].map(v => this.csvCell(v)).join(';')));
         const blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
         const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'papan-skor-aksi-bupati-cilik.csv';
         document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
       },
-      open() { AudioEngine.playClick(); this.render(); document.getElementById('scoreboard').classList.remove('hidden'); },
+      open() { AudioEngine.playClick(); const tabs = document.getElementById('sbTabs'); tabs.classList.toggle('hidden', !this.url()); this.setView(this.url() ? 'all' : 'local'); this.flush(); document.getElementById('scoreboard').classList.remove('hidden'); },
       close() { document.getElementById('scoreboard').classList.add('hidden'); },
       init() {
         const dlg = document.getElementById('scoreboard'); if (!dlg) return;
+        // Progres tersimpan dari permainan sebelumnya (mis. versi lama tanpa papan skor) ikut dimasukkan.
+        try { const d = Progress.load(); if (d && d.completedZones.some(Boolean)) this.record(d); } catch (e) { /* abaikan */ }
         document.getElementById('btnScoreboard').addEventListener('click', () => this.open());
         document.getElementById('sbClose').addEventListener('click', () => { AudioEngine.playClick(); this.close(); });
+        document.getElementById('sbTabAll').addEventListener('click', () => { AudioEngine.playClick(); this.setView('all'); });
+        document.getElementById('sbTabLocal').addEventListener('click', () => { AudioEngine.playClick(); this.setView('local'); });
+        document.getElementById('sbReload').addEventListener('click', () => { AudioEngine.playClick(); if (this.view === 'all') this.loadRemote(); else this.render(); });
         document.getElementById('sbCsv').addEventListener('click', () => { AudioEngine.playClick(); this.exportCsv(); });
         document.addEventListener('keydown', ev => { if (ev.key === 'Escape') this.close(); });
+        window.addEventListener('online', () => this.flush());
+        // Saat URL Google Sheets baru dipasang, semua data yang sudah ada di perangkat ini ikut dikirim sekali.
+        try {
+          const u = this.url();
+          if (u && localStorage.getItem('aksiBupatiSkorUrl') !== u) {
+            const q = this.qGet(); this.all().forEach(r => { q[r.k] = r; }); this.qPut(q); localStorage.setItem('aksiBupatiSkorUrl', u);
+          }
+        } catch (e) { /* abaikan */ }
+        this.flush(); this.syncUi();
       }
     };
     const game = {
